@@ -1,0 +1,16 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="cdk synth" type="js.build_tools.npm">
+    <package-json value="$PROJECT_DIR$/package.json" />
+    <command value="run" />
+    <scripts>
+      <script value="cdk" />
+    </scripts>
+    <arguments value="synth" />
+    <node-interpreter value="project" />
+    <envs>
+      <env name="CDK_DEFAULT_ACCOUNT" value="998150297714_AWSAdministratorAccess" />
+      <env name="AWS_PROFILE" value="998150297714_AWSAdministratorAccess" />
+    </envs>
+    <method v="2" />
+  </configuration>
+</component>
