@@ -5,7 +5,7 @@ import { VpcStack } from '../lib/VpcStack';
 
 const app = new cdk.App();
 
-new VpcStack(app, 'LFXCDKVpcStack', {
+new VpcStack(app, 'LFXCDK-VPCStack', {
   vpcCidr: '10.100.0.0/20',
   vpcAZs: ['eu-west-1a', 'eu-west-1b',],
   ngAZs: ['eu-west-1a',],
