@@ -42,10 +42,10 @@ export class VpcStack extends Stack {
     this.securityGroups[0].connections.allowInternally(ec2.Port.allTraffic());
 
     // Outputs
-    new cdk.CfnOutput(this, 'VPCARNOutput', {
-      value: this.vpc.vpcArn,
-      exportName: 'vpc-arn',
-      description: 'the Amazon Resource Name for our Virtual Private Network',
+    new cdk.CfnOutput(this, 'VPCIDOutput', {
+      value: this.vpc.vpcId,
+      exportName: 'vpc-id',
+      description: 'the ID for our Virtual Private Network',
     });
     new cdk.CfnOutput(this, 'SecurityGroupIDOutput', {
       value: this.securityGroups.map(s => s.securityGroupId).join(','),
