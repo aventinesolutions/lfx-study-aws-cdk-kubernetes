@@ -1,4 +1,4 @@
-// import { Construct } from 'constructs';
+import * as cdk from 'aws-cdk-lib';
 import * as ec2 from 'aws-cdk-lib/aws-ec2';
 
 import { Construct } from 'constructs';
@@ -40,5 +40,17 @@ export class VpcStack extends Stack {
     });
     this.securityGroups[0].addIngressRule(ec2.Peer.ipv4(props.vpcCidr), ec2.Port.allTraffic());
     this.securityGroups[0].connections.allowInternally(ec2.Port.allTraffic());
+
+    // Outputs
+    new cdk.CfnOutput(this, 'VPCARNOutput', {
+      value: this.vpc.vpcArn,
+      exportName: 'vpc-arn',
+      description: 'the Amazon Resource Name for our Virtual Private Network',
+    });
+    new cdk.CfnOutput(this, 'SecurityGroupIDOutput', {
+      value: this.securityGroups.map(s => s.securityGroupId).join(','),
+      exportName: 'security-group-ids',
+      description: "comma separated list of Security Group ID's",
+    });
   }
 }

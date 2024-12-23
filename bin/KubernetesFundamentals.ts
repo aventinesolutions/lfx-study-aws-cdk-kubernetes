@@ -12,3 +12,4 @@ new VpcStack(app, 'LFXCDK-VPCStack', {
   publicCidrMask: 26,
   privateCidrMask: 24,
 });
+
