@@ -1,9 +1,11 @@
 import { StackProps } from 'aws-cdk-lib';
+import { EnvProps } from "./EnvProps";
 
 export interface VpcStackProps extends StackProps {
-    vpcCidr: string,
-    vpcAZs: string[],
-    ngAZs: string[],
-    publicCidrMask: number,
-    privateCidrMask: number
+  env: EnvProps,
+  vpcCidr: string,
+  vpcAZs: string[],
+  ngAZs: string[],
+  publicCidrMask: number,
+  privateCidrMask: number
 }
