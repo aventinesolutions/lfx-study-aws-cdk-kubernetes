@@ -6,7 +6,6 @@ import * as ec2 from "aws-cdk-lib/aws-ec2";
 import { EnvProps } from "../interfaces/EnvProps";
 import { VpcStack } from '../lib/VpcStack';
 import { ComputeStack } from '../lib/ComputeStack';
-import * as iam from "aws-cdk-lib/aws-iam";
 
 let account = '<unknown>';
 if (process.env.CDK_DEFAULT_ACCOUNT === undefined) {
@@ -34,7 +33,7 @@ const vpcStack = new VpcStack(app, 'LFXCDK-VPCStack', {
 
 const ubuntuImage = ec2.MachineImage.lookup({
   owners: ['amazon'],
-  name: 'ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-20240530',
+  name: 'ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*',
 });
 
 new ComputeStack(app, 'LFXCDK-ComputeStack', {

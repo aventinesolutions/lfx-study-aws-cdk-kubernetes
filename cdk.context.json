@@ -48,5 +48,6 @@
       }
     ]
   },
-  "ami:account=998150297714:filters.image-type.0=machine:filters.name.0=ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-20240530:filters.state.0=available:owners.0=amazon:region=eu-west-1": "ami-006cfe9f763a1cb77"
+  "ami:account=998150297714:filters.image-type.0=machine:filters.name.0=ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-20240530:filters.state.0=available:owners.0=amazon:region=eu-west-1": "ami-006cfe9f763a1cb77",
+  "ami:account=998150297714:filters.image-type.0=machine:filters.name.0=ubuntu/images/hvm-ssd/ubuntu-jammy-22.04-amd64-server-*:filters.state.0=available:owners.0=amazon:region=eu-west-1": "ami-08e0351f572d4eb18"
 }
