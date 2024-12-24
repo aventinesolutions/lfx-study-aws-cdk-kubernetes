@@ -4,8 +4,8 @@ import { EnvProps } from "./EnvProps";
 export interface VpcStackProps extends StackProps {
   env: EnvProps,
   vpcCidr: string,
-  vpcAZs: string[],
-  ngAZs: string[],
+  natGateways: number,
+  maxAzs: number,
   publicCidrMask: number,
-  privateCidrMask: number
+  privateCidrMask: number,
 }

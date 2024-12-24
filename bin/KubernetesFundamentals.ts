@@ -25,8 +25,8 @@ const app = new cdk.App();
 const vpcStack = new VpcStack(app, 'LFXCDK-VPCStack', {
   env,
   vpcCidr: '10.100.0.0/20',
-  vpcAZs: ['eu-west-1a', 'eu-west-1b',],
-  ngAZs: ['eu-west-1a',],
+  natGateways: 1,
+  maxAzs: 2,
   publicCidrMask: 26,
   privateCidrMask: 24,
 });

@@ -17,8 +17,8 @@ export class VpcStack extends Stack {
 
     this.vpc = new ec2.Vpc(this, 'vpc', {
       ipAddresses: ec2.IpAddresses.cidr(props.vpcCidr),
-      natGateways: props.ngAZs.length,
-      availabilityZones: props.vpcAZs,
+      natGateways: props.natGateways,
+      maxAzs: props.maxAzs,
       subnetConfiguration: [
         {
           cidrMask: props.publicCidrMask,
