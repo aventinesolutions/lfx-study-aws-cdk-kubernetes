@@ -1,0 +1,17 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="cdk  deploy *** ALL ***" type="js.build_tools.npm" folderName="*** ALL ***">
+    <package-json value="$PROJECT_DIR$/package.json" />
+    <command value="run" />
+    <scripts>
+      <script value="cdk" />
+    </scripts>
+    <arguments value="deploy 'LFXCDK-*'" />
+    <node-interpreter value="project" />
+    <envs>
+      <env name="AWS_PROFILE" value="998150297714_AWSAdministratorAccess" />
+      <env name="CDK_DEFAULT_ACCOUNT" value="998150297714_AWSAdministratorAccess" />
+      <env name="CDK_DEFAULT_REGION" value="eu-west-1" />
+    </envs>
+    <method v="2" />
+  </configuration>
+</component>
