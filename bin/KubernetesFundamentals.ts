@@ -22,6 +22,7 @@ const env: EnvProps = {
 
 const globalTags = new Map<string, string>([
   ['Student', 'matthew.evaneichler@luminis.eu'],
+  ['Course', 'LFS258 Kubernetes Fundamentals'],
 ]);
 
 const app = new cdk.App();
