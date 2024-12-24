@@ -44,12 +44,12 @@ export class VpcStack extends Stack {
     // Outputs
     new cdk.CfnOutput(this, 'VPCIDOutput', {
       value: this.vpc.vpcId,
-      exportName: 'vpc-id',
+      exportName: 'LFXCDK-vpc-id',
       description: 'the ID for our Virtual Private Network',
     });
     new cdk.CfnOutput(this, 'SecurityGroupIDOutput', {
       value: this.securityGroups.map(s => s.securityGroupId).join(','),
-      exportName: 'security-group-ids',
+      exportName: 'LFXCDK-security-group-ids',
       description: "comma separated list of Security Group ID's",
     });
   }
