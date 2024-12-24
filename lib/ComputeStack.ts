@@ -15,9 +15,17 @@ export class ComputeStack extends Stack {
   constructor(scope: Construct, id: string, props: ComputeStackProps) {
     super(scope, id, props);
 
-    const vpc = ec2.Vpc.fromLookup(props.vpcStack, 'OurVPC', {
-      vpcName: 'LFXCDK-VPCStack/vpc',
+    const vpc = ec2.Vpc.fromLookup(this, 'OurVPC', {
+      // vpcName: 'LFXCDK-VPCStack/vpc',
+      vpcId: 'vpc-0303a6c6794ca6be5',
+      // vpcId: cdk.Fn.importValue('LFXCDK-vpc-id'),
     });
+
+    // const vpcId = cdk.Fn.importValue('LFXCDK-vpc-id');
+    // const vpc = ec2.Vpc.fromVpcAttributes(props.vpcStack, 'LFXCDKVPC', {
+    //   vpcId,
+    //   availabilityZones: ['eu-west-1a', 'eu-west-1b'],
+    // });
 
     const securityGroups: ec2.ISecurityGroup[] = [];
     cdk.Fn.importValue('LFXCDK-security-group-ids').split(',').map(id => {
