@@ -15,18 +15,6 @@ export class ComputeStack extends Stack {
   constructor(scope: Construct, id: string, props: ComputeStackProps) {
     super(scope, id, props);
 
-    const vpc = ec2.Vpc.fromLookup(this, 'OurVPC', {
-      // vpcName: 'LFXCDK-VPCStack/vpc',
-      vpcId: 'vpc-0303a6c6794ca6be5',
-      // vpcId: cdk.Fn.importValue('LFXCDK-vpc-id'),
-    });
-
-    // const vpcId = cdk.Fn.importValue('LFXCDK-vpc-id');
-    // const vpc = ec2.Vpc.fromVpcAttributes(props.vpcStack, 'LFXCDKVPC', {
-    //   vpcId,
-    //   availabilityZones: ['eu-west-1a', 'eu-west-1b'],
-    // });
-
     const securityGroups: ec2.ISecurityGroup[] = [];
     cdk.Fn.importValue('LFXCDK-security-group-ids').split(',').map(id => {
       securityGroups.push(ec2.SecurityGroup.fromSecurityGroupId(props.vpcStack, id, id));
@@ -36,7 +24,7 @@ export class ComputeStack extends Stack {
 
     // Create the Control Plane EC2 Compute Instance
     this.controlPlane = new ec2.Instance(this, props.controlPlane.instanceName, {
-      vpc,
+      vpc: props.vpcStack.vpc,
       instanceName: props.controlPlane.instanceName,
       instanceType: props.controlPlane.instanceType,
       machineImage: props.controlPlane.instanceMachineImage,
@@ -58,7 +46,7 @@ export class ComputeStack extends Stack {
 
     // Create the Worker EC2 Compute Instance
     this.worker = new ec2.Instance(this, props.worker.instanceName, {
-      vpc,
+      vpc: props.vpcStack.vpc,
       instanceName: props.worker.instanceName,
       instanceType: props.worker.instanceType,
       machineImage: props.worker.instanceMachineImage,
@@ -77,5 +65,17 @@ export class ComputeStack extends Stack {
 
     // Add Security Groups with Ingress/Egress Rules
     securityGroups.map(s => this.worker.addSecurityGroup(s));
+
+    // Outputs
+    new cdk.CfnOutput(this, 'ControlPlaneInstanceOutput', {
+      value: this.controlPlane.instanceId,
+      exportName: 'LFXCDK-control-plane-ids',
+      description: "the instance ID's for our Kubernetes Control Plane Nodes",
+    });
+    new cdk.CfnOutput(this, 'WorkerInstanceOutput', {
+      value: this.worker.instanceId,
+      exportName: 'LFXCDK-worker-ids',
+      description: "the instance ID's for our Kubernetes Worker Nodes",
+    });
   }
 }
