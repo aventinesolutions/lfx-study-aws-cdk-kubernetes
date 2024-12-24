@@ -2,6 +2,7 @@ import { Stack } from "aws-cdk-lib";
 import { Construct } from "constructs";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
 import * as cdk from 'aws-cdk-lib';
+import * as iam from 'aws-cdk-lib/aws-iam';
 
 import { ComputeStackProps } from '../interfaces/ComputeStackProps';
 
@@ -23,12 +24,15 @@ export class ComputeStack extends Stack {
       securityGroups.push(ec2.SecurityGroup.fromSecurityGroupId(props.vpcStack, id, id));
     });
 
+    const role = iam.Role.fromRoleName(this, 'LFXCDK-InstanceRole', props.instanceRoleName);
+
     // Create the Control Plane EC2 Compute Instance
     this.controlPlane = new ec2.Instance(this, props.controlPlane.instanceName, {
       vpc,
       instanceName: props.controlPlane.instanceName,
       instanceType: props.controlPlane.instanceType,
       machineImage: props.controlPlane.instanceMachineImage,
+      role,
       blockDevices: [
         {
           deviceName: '/dev/sda1',
@@ -50,6 +54,7 @@ export class ComputeStack extends Stack {
       instanceName: props.worker.instanceName,
       instanceType: props.worker.instanceType,
       machineImage: props.worker.instanceMachineImage,
+      role,
       blockDevices: [
         {
           deviceName: '/dev/sda1',

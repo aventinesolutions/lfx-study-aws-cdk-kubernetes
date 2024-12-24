@@ -6,6 +6,7 @@ import * as ec2 from "aws-cdk-lib/aws-ec2";
 import { EnvProps } from "../interfaces/EnvProps";
 import { VpcStack } from '../lib/VpcStack';
 import { ComputeStack } from '../lib/ComputeStack';
+import * as iam from "aws-cdk-lib/aws-iam";
 
 let account = '<unknown>';
 if (process.env.CDK_DEFAULT_ACCOUNT === undefined) {
@@ -39,6 +40,7 @@ const ubuntuImage = ec2.MachineImage.lookup({
 new ComputeStack(app, 'LFXCDK-ComputeStack', {
   env,
   vpcStack,
+  instanceRoleName: 'LFXCDK-SSMRoleForInstancesDefault',
   controlPlane: {
     instanceName: 'kubernetes-control-plane',
     instanceType: ec2.InstanceType.of(ec2.InstanceClass.T3, ec2.InstanceSize.LARGE),
