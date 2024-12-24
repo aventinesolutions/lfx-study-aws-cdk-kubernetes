@@ -19,7 +19,7 @@ export class ComputeStack extends Stack {
     });
 
     const securityGroups: ec2.ISecurityGroup[] = [];
-    cdk.Fn.importValue('SecurityGroupIDOutput').split(',').map(id => {
+    cdk.Fn.importValue('security-group-ids').split(',').map(id => {
       securityGroups.push(ec2.SecurityGroup.fromSecurityGroupId(props.vpcStack, id, id));
     });
 
