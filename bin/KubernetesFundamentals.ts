@@ -20,6 +20,10 @@ const env: EnvProps = {
   region: process.env.CDK_DEFAULT_REGION || 'eu-west-1',
 };
 
+const globalTags = new Map<string, string>([
+  ['Student', 'matthew.evaneichler@luminis.eu'],
+]);
+
 const app = new cdk.App();
 
 const vpcStack = new VpcStack(app, 'LFXCDK-VPCStack', {
@@ -29,6 +33,7 @@ const vpcStack = new VpcStack(app, 'LFXCDK-VPCStack', {
   maxAzs: 2,
   publicCidrMask: 26,
   privateCidrMask: 24,
+  globalTags,
 });
 
 const ubuntuImage = ec2.MachineImage.lookup({
@@ -53,7 +58,8 @@ new ComputeStack(app, 'LFXCDK-ComputeStack', {
     instanceMachineImage: ubuntuImage,
     rootVolumeSize: 250,
     roleNameTag: 'kubernetes-worker',
-  }
+  },
+  globalTags,
 });
 
 

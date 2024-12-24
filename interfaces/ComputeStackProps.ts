@@ -11,4 +11,5 @@ export interface ComputeStackProps extends StackProps {
   instanceRoleName: string,
   controlPlane: ComputeInstanceStackProps,
   worker: ComputeInstanceStackProps,
+  globalTags: Map<string, string>,
 }

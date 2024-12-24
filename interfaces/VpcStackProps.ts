@@ -8,4 +8,5 @@ export interface VpcStackProps extends StackProps {
   maxAzs: number,
   publicCidrMask: number,
   privateCidrMask: number,
+  globalTags: Map<string, string>,
 }

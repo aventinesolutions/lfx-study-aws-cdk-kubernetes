@@ -40,6 +40,10 @@ export class ComputeStack extends Stack {
     });
     cdk.Tags.of(this.controlPlane).add('Name', props.controlPlane.instanceName);
     cdk.Tags.of(this.controlPlane).add('Role', props.controlPlane.roleNameTag);
+    // set Global Tags
+    for (let entry of props.globalTags.entries()) {
+      cdk.Tags.of(this.controlPlane).add(entry[0], entry[1]);
+    }
 
     // Add Security Groups with Ingress/Egress Rules
     securityGroups.map(s => this.controlPlane.addSecurityGroup(s));
@@ -62,6 +66,10 @@ export class ComputeStack extends Stack {
     });
     cdk.Tags.of(this.worker).add('Name', props.worker.instanceName);
     cdk.Tags.of(this.worker).add('Role', props.worker.roleNameTag);
+    // set Global Tags
+    for (let entry of props.globalTags.entries()) {
+      cdk.Tags.of(this.worker).add(entry[0], entry[1]);
+    }
 
     // Add Security Groups with Ingress/Egress Rules
     securityGroups.map(s => this.worker.addSecurityGroup(s));

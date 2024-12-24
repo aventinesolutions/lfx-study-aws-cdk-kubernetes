@@ -33,6 +33,11 @@ export class VpcStack extends Stack {
       ]
     });
 
+    // set Global Tags
+    for (let entry of props.globalTags.entries()) {
+      cdk.Tags.of(this.vpc).add(entry[0], entry[1]);
+    }
+
     // Security group so all hosts can communicate with each other.
     this.securityGroups[0] = new ec2.SecurityGroup(this, 'LFXCKA-see-each-other', {
       vpc: this.vpc,
