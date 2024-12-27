@@ -34,4 +34,8 @@ npx cdk destroy 'LFXCDK-*'
 ```
 * the IntelliJ Project includes some runtime configuration examples
 
+## Systems Manager
+* the compute instances will be accessible through the Systems Manager Fleet Manager
+
+
 
