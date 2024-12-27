@@ -10,3 +10,28 @@
   * `AmazonSSMManagedInstanceCore`
   * `CloudWatchAgentServerPolicy`
 * this allows instances to be managed by the Systems Manager [SSM]
+
+## Environment Variables
+* set up the appropriate AWS account credentials and configuration
+* Set these environment variables
+```shell
+export AWS_PROFILE=aventinesolutions
+export CDK_DEFAULT_PROFILE=aventinesolutions
+export CDK_DEFAULT_REGION=us-west-2
+```
+## CDK Workflow
+* bootstrap the context based on the AWS account
+```shell
+npx cdk bootstrap
+```
+* deploy the two stacks (VPC and Security Groups will get created first, then the Compute Instances)
+```shell
+npx cdk deploy 'LFXCDK-*' 
+```
+* destroy the stacks when the course is complete
+```shell
+npx cdk destroy 'LFXCDK-*' 
+```
+* the IntelliJ Project includes some runtime configuration examples
+
+
