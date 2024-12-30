@@ -1,0 +1,17 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="cdk  deploy" type="js.build_tools.npm">
+    <package-json value="$PROJECT_DIR$/package.json" />
+    <command value="run" />
+    <scripts>
+      <script value="cdk" />
+    </scripts>
+    <arguments value="deploy" />
+    <node-interpreter value="project" />
+    <envs>
+      <env name="AWS_PROFILE" value="mokum" />
+      <env name="CDK_DEFAULT_ACCOUNT" value="mokum" />
+      <env name="CDK_DEFAULT_REGION" value="eu-west-1" />
+    </envs>
+    <method v="2" />
+  </configuration>
+</component>
