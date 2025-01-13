@@ -9,4 +9,6 @@ export interface VpcStackProps extends StackProps {
   publicCidrMask: number,
   privateCidrMask: number,
   globalTags: Map<string, string>,
+  // allowed public IP Addresses for SSH access to Kubernetes Nodes
+  allowedPublicIps: string[],
 }

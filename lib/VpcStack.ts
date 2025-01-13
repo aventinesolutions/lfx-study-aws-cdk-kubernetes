@@ -46,6 +46,16 @@ export class VpcStack extends Stack {
     this.securityGroups[0].addIngressRule(ec2.Peer.ipv4(props.vpcCidr), ec2.Port.allTraffic());
     this.securityGroups[0].connections.allowInternally(ec2.Port.allTraffic());
 
+    // Security group allowing Public SSH Access from restricted IP Addresses
+    this.securityGroups[1] = new ec2.SecurityGroup(this, 'LFXCKA-public-ssh-access', {
+      vpc: this.vpc,
+      securityGroupName: 'LFXCKA-public-ssh-access',
+      allowAllOutbound: true,
+    });
+    props.allowedPublicIps.forEach(ip =>
+      this.securityGroups[1].addIngressRule(ec2.Peer.ipv4(ip), ec2.Port.tcp(22))
+    );
+
     // Outputs
     new cdk.CfnOutput(this, 'VPCIDOutput', {
       value: this.vpc.vpcId,

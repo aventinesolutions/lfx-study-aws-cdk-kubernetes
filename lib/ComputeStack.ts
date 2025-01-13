@@ -15,11 +15,6 @@ export class ComputeStack extends Stack {
   constructor(scope: Construct, id: string, props: ComputeStackProps) {
     super(scope, id, props);
 
-    const securityGroups: ec2.ISecurityGroup[] = [];
-    cdk.Fn.importValue('LFXCDK-security-group-ids').split(',').map(id => {
-      securityGroups.push(ec2.SecurityGroup.fromSecurityGroupId(props.vpcStack, id, id));
-    });
-
     const role = iam.Role.fromRoleName(this, 'LFXCDK-InstanceRole', props.instanceRoleName);
 
     // Create the Control Plane EC2 Compute Instance
@@ -49,7 +44,7 @@ export class ComputeStack extends Stack {
     }
 
     // Add Security Groups with Ingress/Egress Rules
-    securityGroups.map(s => this.controlPlane.addSecurityGroup(s));
+    props.vpcStack.securityGroups.forEach(s => this.controlPlane.addSecurityGroup(s));
 
     // Create the Worker EC2 Compute Instance
     this.worker = new ec2.Instance(this, props.worker.instanceName, {
@@ -78,7 +73,7 @@ export class ComputeStack extends Stack {
     }
 
     // Add Security Groups with Ingress/Egress Rules
-    securityGroups.map(s => this.worker.addSecurityGroup(s));
+    props.vpcStack.securityGroups.forEach(s => this.worker.addSecurityGroup(s));
 
     // Outputs
     new cdk.CfnOutput(this, 'ControlPlaneInstanceOutput', {
