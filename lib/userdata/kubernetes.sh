@@ -1,11 +1,11 @@
 #!/bin/bash
 
 apt-get update
-apt-get upgrade -y --force=yes
+# apt-get upgrade -y
 
 # Ubuntu Basics for Kubernetes DevOps
 apt-get install -y tree emacs-nox vim zsh tmux
-apt install curl apt-transport-https git wget -y
+apt install curl apt-transport-https git wget bash-completion -y
 apt install software-properties-common lsb-release ca-certificates socat -y
 
 # Bash Basics
@@ -33,6 +33,7 @@ mkdir -v -p -m 755 /etc/apt/keyrings
 curl -fsSL https://download.docker.com/linux/ubuntu/gpg | gpg --dearmor -o /etc/apt/keyrings/docker.gpg
 echo 'deb [arch=amd64 signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu jammy stable' | tee /etc/apt/sources.list.d/docker.list > /dev/null
 apt-get update && apt-get install -y containerd.io
+containerd config default | tee /etc/containerd/config.toml
 sed -e 's/SystemdCgroup = false/SystemdCgroup = true/g' -i /etc/containerd/config.toml
 systemctl restart containerd
 
