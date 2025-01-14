@@ -3,19 +3,23 @@ import { Construct } from "constructs";
 import * as ec2 from "aws-cdk-lib/aws-ec2";
 import * as cdk from 'aws-cdk-lib';
 import * as iam from 'aws-cdk-lib/aws-iam';
+import * as fs from 'fs';
 
 import { ComputeStackProps } from '../interfaces/ComputeStackProps';
 
 
 export class ComputeStack extends Stack {
 
-  controlPlane: ec2.Instance;
-  worker: ec2.Instance;
+  public userData: string;
+  public controlPlane: ec2.Instance;
+  public worker: ec2.Instance;
 
   constructor(scope: Construct, id: string, props: ComputeStackProps) {
     super(scope, id, props);
 
     const role = iam.Role.fromRoleName(this, 'LFXCDK-InstanceRole', props.instanceRoleName);
+
+    this.userData = fs.readFileSync(props.userDataPath, 'utf8');
 
     // Create the Control Plane EC2 Compute Instance
     this.controlPlane = new ec2.Instance(this, props.controlPlane.instanceName, {
@@ -23,6 +27,7 @@ export class ComputeStack extends Stack {
       instanceName: props.controlPlane.instanceName,
       instanceType: props.controlPlane.instanceType,
       machineImage: props.controlPlane.instanceMachineImage,
+      userData: ec2.UserData.custom(this.userData),
       role,
       blockDevices: [
         {
@@ -52,6 +57,7 @@ export class ComputeStack extends Stack {
       instanceName: props.worker.instanceName,
       instanceType: props.worker.instanceType,
       machineImage: props.worker.instanceMachineImage,
+      userData: ec2.UserData.custom(this.userData),
       role,
       blockDevices: [
         {
