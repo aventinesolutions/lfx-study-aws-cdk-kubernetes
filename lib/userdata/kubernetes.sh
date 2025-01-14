@@ -49,5 +49,4 @@ echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.c
 apt-get update && apt install -y helm
 helm version
 
-
-
+echo 'remember, before anything, to do a manual "apt-get upgrade -y"'
