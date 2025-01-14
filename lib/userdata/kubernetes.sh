@@ -1,6 +1,7 @@
 #!/bin/bash
 
 apt-get update
+apt-get upgrade -y --force=yes
 
 # Ubuntu Basics for Kubernetes DevOps
 apt-get install -y tree emacs-nox vim zsh tmux
@@ -8,7 +9,7 @@ apt install curl apt-transport-https git wget -y
 apt install software-properties-common lsb-release ca-certificates socat -y
 
 # Bash Basics
-chsh -s /bin/bash
+chsh -s /bin/bash root
 chsh -s /bin/bash ssm-user
 
 echo 'export FCEDIT=emacs' >> /root/.bashrc
@@ -48,5 +49,3 @@ curl https://baltocdn.com/helm/signing.asc | gpg --dearmor -o /usr/share/keyring
 echo 'deb [arch=amd64 signed-by=/usr/share/keyrings/helm.gpg] https://baltocdn.com/helm/stable/debian/ all main' | tee /etc/apt/sources.list.d/helm-stable-debian.list
 apt-get update && apt install -y helm
 helm version
-
-echo 'remember, before anything, to do a manual "apt-get upgrade -y"'
