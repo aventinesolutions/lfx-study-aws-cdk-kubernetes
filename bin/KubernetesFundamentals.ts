@@ -56,6 +56,7 @@ new ComputeStack(app, 'LFXCDK-ComputeStack', {
     rootVolumeSize: 250,
     roleNameTag: 'kubernetes-control-plane',
   },
+  userDataPath: 'lib/userdata/kubernetes.sh',
   worker: {
     instanceName: 'kubernetes-worker',
     instanceType: ec2.InstanceType.of(ec2.InstanceClass.T3, ec2.InstanceSize.LARGE),
