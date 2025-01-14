@@ -35,6 +35,9 @@ const vpcStack = new VpcStack(app, 'LFXCDK-VPCStack', {
   publicCidrMask: 26,
   privateCidrMask: 24,
   globalTags,
+  allowedPublicIps: [
+    '62.194.68.139/32', // Aventine
+  ],
 });
 
 const ubuntuImage = ec2.MachineImage.lookup({

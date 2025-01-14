@@ -15,11 +15,6 @@ export class ComputeStack extends Stack {
   constructor(scope: Construct, id: string, props: ComputeStackProps) {
     super(scope, id, props);
 
-    const securityGroups: ec2.ISecurityGroup[] = [];
-    cdk.Fn.importValue('LFXCDK-security-group-ids').split(',').map(id => {
-      securityGroups.push(ec2.SecurityGroup.fromSecurityGroupId(props.vpcStack, id, id));
-    });
-
     const role = iam.Role.fromRoleName(this, 'LFXCDK-InstanceRole', props.instanceRoleName);
 
     // Create the Control Plane EC2 Compute Instance
@@ -37,6 +32,9 @@ export class ComputeStack extends Stack {
           }),
         }
       ],
+      vpcSubnets: {
+        subnetType: ec2.SubnetType.PUBLIC,
+      },
     });
     cdk.Tags.of(this.controlPlane).add('Name', props.controlPlane.instanceName);
     cdk.Tags.of(this.controlPlane).add('Role', props.controlPlane.roleNameTag);
@@ -46,7 +44,7 @@ export class ComputeStack extends Stack {
     }
 
     // Add Security Groups with Ingress/Egress Rules
-    securityGroups.map(s => this.controlPlane.addSecurityGroup(s));
+    props.vpcStack.securityGroups.forEach(s => this.controlPlane.addSecurityGroup(s));
 
     // Create the Worker EC2 Compute Instance
     this.worker = new ec2.Instance(this, props.worker.instanceName, {
@@ -63,6 +61,9 @@ export class ComputeStack extends Stack {
           }),
         }
       ],
+      vpcSubnets: {
+        subnetType: ec2.SubnetType.PUBLIC,
+      },
     });
     cdk.Tags.of(this.worker).add('Name', props.worker.instanceName);
     cdk.Tags.of(this.worker).add('Role', props.worker.roleNameTag);
@@ -72,7 +73,7 @@ export class ComputeStack extends Stack {
     }
 
     // Add Security Groups with Ingress/Egress Rules
-    securityGroups.map(s => this.worker.addSecurityGroup(s));
+    props.vpcStack.securityGroups.forEach(s => this.worker.addSecurityGroup(s));
 
     // Outputs
     new cdk.CfnOutput(this, 'ControlPlaneInstanceOutput', {
@@ -80,10 +81,20 @@ export class ComputeStack extends Stack {
       exportName: 'LFXCDK-control-plane-ids',
       description: "the instance ID's for our Kubernetes Control Plane Nodes",
     });
+    new cdk.CfnOutput(this, 'ControlPlanePublicIPs', {
+      value: this.controlPlane.instancePublicIp,
+      exportName: 'LFXCDK-control-plane-public-ips',
+      description: "the Public IP Addresses for our Kubernetes Control Plane Nodes",
+    });
     new cdk.CfnOutput(this, 'WorkerInstanceOutput', {
       value: this.worker.instanceId,
       exportName: 'LFXCDK-worker-ids',
       description: "the instance ID's for our Kubernetes Worker Nodes",
+    });
+    new cdk.CfnOutput(this, 'WorkerPublicIPs', {
+      value: this.worker.instancePublicIp,
+      exportName: 'LFXCDK-worker-public-ips',
+      description: "the Public IP Addresses for our Kubernetes Worker Nodes",
     });
   }
 }
