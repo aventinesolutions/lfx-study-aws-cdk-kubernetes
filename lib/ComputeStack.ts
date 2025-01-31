@@ -13,6 +13,7 @@ export class ComputeStack extends Stack {
   public userData: string;
   public controlPlane: ec2.Instance;
   public worker: ec2.Instance;
+  public extraNodes: ec2.Instance[];
 
   constructor(scope: Construct, id: string, props: ComputeStackProps) {
     super(scope, id, props);
@@ -81,6 +82,41 @@ export class ComputeStack extends Stack {
     // Add Security Groups with Ingress/Egress Rules
     props.vpcStack.securityGroups.forEach(s => this.worker.addSecurityGroup(s));
 
+    // The EC2 instances for Extra Nodes if they ar desired for practicing Kubernetes Cluster Availability
+
+    this.extraNodes = [];
+    for (const i of [...Array(props.numExtraNodes).keys()]) {
+      const instanceName = `${props.extra.instanceName}${1 + i}`;
+      this.extraNodes.push(new ec2.Instance(this, instanceName, {
+        vpc: props.vpcStack.vpc,
+        instanceName: instanceName,
+        instanceType: props.extra.instanceType,
+        machineImage: props.extra.instanceMachineImage,
+        userData: ec2.UserData.custom(this.userData),
+        role,
+        blockDevices: [
+          {
+            deviceName: '/dev/sda1',
+            volume: ec2.BlockDeviceVolume.ebs(props.extra.rootVolumeSize, {
+              volumeType: ec2.EbsDeviceVolumeType.GP2
+            }),
+          }
+        ],
+        vpcSubnets: {
+          subnetType: ec2.SubnetType.PUBLIC,
+        },
+      }));
+      cdk.Tags.of(this.extraNodes[i]).add('Name', instanceName);
+      cdk.Tags.of(this.extraNodes[i]).add('Role', props.extra.roleNameTag);
+      // set Global Tags
+      for (let entry of props.globalTags.entries()) {
+        cdk.Tags.of(this.extraNodes[i]).add(entry[0], entry[1]);
+      }
+
+      // Add Security Groups with Ingress/Egress Rules
+      props.vpcStack.securityGroups.forEach(s => this.extraNodes[i].addSecurityGroup(s));
+    }
+
     // Outputs
     new cdk.CfnOutput(this, 'ControlPlaneInstanceOutput', {
       value: this.controlPlane.instanceId,
@@ -90,17 +126,22 @@ export class ComputeStack extends Stack {
     new cdk.CfnOutput(this, 'ControlPlanePublicIPs', {
       value: this.controlPlane.instancePublicIp,
       exportName: 'LFXCDK-control-plane-public-ips',
-      description: "the Public IP Addresses for our Kubernetes Control Plane Nodes",
+      description: 'the Public IP Addresses for our Kubernetes Control Plane Nodes',
     });
     new cdk.CfnOutput(this, 'WorkerInstanceOutput', {
       value: this.worker.instanceId,
       exportName: 'LFXCDK-worker-ids',
-      description: "the instance ID's for our Kubernetes Worker Nodes",
+      description: 'the instance ID\'s for our Kubernetes Worker Nodes',
     });
     new cdk.CfnOutput(this, 'WorkerPublicIPs', {
       value: this.worker.instancePublicIp,
       exportName: 'LFXCDK-worker-public-ips',
-      description: "the Public IP Addresses for our Kubernetes Worker Nodes",
+      description: 'the Public IP Addresses for our Kubernetes Worker Nodes',
+    });
+    new cdk.CfnOutput(this, 'ExtraPublicIPs', {
+      value: this.extraNodes.map(n => n.instanceId).join(','),
+      exportName: 'LFXCDK-extra-public-ips',
+      description: 'the Public IP Addresses for our Kubernetes Extra Nodes (the ones used for studying availability'
     });
   }
 }
