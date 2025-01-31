@@ -42,6 +42,8 @@ curl -fsSL https://pkgs.k8s.io/core:/stable:/v1.30/deb/Release.key | gpg --dearm
 echo 'deb [signed-by=/etc/apt/keyrings/kubernetes-apt-keyring.gpg] https://pkgs.k8s.io/core:/stable:/v1.30/deb/ /' | tee /etc/apt/sources.list.d/kubernetes.list
 apt-get update && apt-get install -y kubeadm kubelet kubectl
 apt-mark hold kubeadm kubelet kubectl
+echo 'export KUBE_EDITOR=emacs' >> /root/.bashrc
+echo 'export KUBE_EDITOR=emacs' >> /home/ssm-user/.bashrc
 echo 'source <(kubectl completion bash)' >> /root/.bashrc
 echo 'source <(kubectl completion bash)' >> /home/ssm-user/.bashrc
 
