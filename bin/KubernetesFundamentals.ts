@@ -64,6 +64,14 @@ new ComputeStack(app, 'LFXCDK-ComputeStack', {
     rootVolumeSize: 250,
     roleNameTag: 'kubernetes-worker',
   },
+  extra: {
+    instanceName: 'kubernetes-extra',
+    instanceType: ec2.InstanceType.of(ec2.InstanceClass.T3, ec2.InstanceSize.LARGE),
+    instanceMachineImage: ubuntuImage,
+    rootVolumeSize: 250,
+    roleNameTag: 'kubernetes-extra',
+  },
+  numExtraNodes: 3,
   globalTags,
 });
 

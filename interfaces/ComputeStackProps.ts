@@ -11,6 +11,11 @@ export interface ComputeStackProps extends StackProps {
   instanceRoleName: string,
   controlPlane: ComputeInstanceStackProps,
   worker: ComputeInstanceStackProps,
+  // these are the EC2 properties if you need Extra Kubernetes Nodes
+  extra: ComputeInstanceStackProps,
   globalTags: Map<string, string>,
   userDataPath: string,
+  // number of desired Extra EC2 Instances for practicing Kubernetes Availability
+  // just set to zero if your skipping that bit
+  numExtraNodes: number,
 }
